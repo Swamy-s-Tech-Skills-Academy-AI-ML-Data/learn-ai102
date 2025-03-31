@@ -1,11 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.35906.104 d17.14
+VisualStudioVersion = 17.14.35906.104
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CS", "CS", "{E80CFEC4-7036-4ED9-926A-1C7459AC9220}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{25BA7385-FB72-43CB-B279-C181383DB307}"
+	ProjectSection(SolutionItems) = preProject
+		src\Data\A.txt = src\Data\A.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PY", "PY", "{112AC4F7-A77A-4EE9-B341-689253BCA82D}"
+	ProjectSection(SolutionItems) = preProject
+		src\PY\A.txt = src\PY\A.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E80CFEC4-7036-4ED9-926A-1C7459AC9220} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{25BA7385-FB72-43CB-B279-C181383DB307} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{112AC4F7-A77A-4EE9-B341-689253BCA82D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8B7A83D-681E-47B8-8E99-D8A28C2FEC0D}
