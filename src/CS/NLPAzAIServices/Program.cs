@@ -13,3 +13,6 @@ AzAISvcAppConfiguration appConfig = host.Services.GetRequiredService<AzAISvcAppC
 
 
 await NERWithAzureAIService.ShowNERDemoWithAzureAIService(appConfig);
+
+WriteLine("\n\nPress any key to exit...");
+ReadKey();

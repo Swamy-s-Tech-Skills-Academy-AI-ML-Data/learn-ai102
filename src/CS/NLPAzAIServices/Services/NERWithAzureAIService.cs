@@ -34,15 +34,17 @@ internal sealed class NERWithAzureAIService
 
             // Read each text file in the ads folder
             List<TextDocumentInput> batchedDocuments = [];
-            var folderPath = Path.GetFullPath("./ads");
+            var folderPath = Path.GetFullPath(@"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\NER\ads");
             DirectoryInfo folder = new(folderPath);
             FileInfo[] files = folder.GetFiles("*.txt");
+
             foreach (var file in files)
             {
                 // Read the file contents
                 StreamReader sr = file.OpenText();
                 var text = sr.ReadToEnd();
                 sr.Close();
+
                 TextDocumentInput doc = new(file.Name, text)
                 {
                     Language = "en",
@@ -51,8 +53,39 @@ internal sealed class NERWithAzureAIService
             }
 
             // Extract entities
+            RecognizeCustomEntitiesOperation operation = await aiClient.RecognizeCustomEntitiesAsync(WaitUntil.Completed, batchedDocuments, appConfig?.NLPAzAIServices?.NERAIService?.ProjectName, appConfig?.NLPAzAIServices?.NERAIService?.DeploymentName);
 
+            await foreach (RecognizeCustomEntitiesResultCollection documentsInPage in operation.Value)
+            {
+                foreach (RecognizeEntitiesResult documentResult in documentsInPage)
+                {
+                    WriteLine($"Result for \"{documentResult.Id}\":");
 
+                    if (documentResult.HasError)
+                    {
+                        WriteLine($"  Error!");
+                        WriteLine($"  Document error code: {documentResult.Error.ErrorCode}");
+                        WriteLine($"  Message: {documentResult.Error.Message}");
+                        WriteLine();
+                        continue;
+                    }
+
+                    WriteLine($"  Recognized {documentResult.Entities.Count} entities:");
+
+                    foreach (CategorizedEntity entity in documentResult.Entities)
+                    {
+                        WriteLine($"  Entity: {entity.Text}");
+                        WriteLine($"  Category: {entity.Category}");
+                        WriteLine($"  Offset: {entity.Offset}");
+                        WriteLine($"  Length: {entity.Length}");
+                        WriteLine($"  ConfidenceScore: {entity.ConfidenceScore}");
+                        WriteLine($"  SubCategory: {entity.SubCategory}");
+                        WriteLine();
+                    }
+
+                    WriteLine();
+                }
+            }
         }
         catch (Exception ex)
         {
