@@ -13,7 +13,8 @@ python -m venv .venv
 .venv/Scripts/activate
 python -m pip install --upgrade pip
 
-pip install Flask python-dotenv openai
-pip install flask-cors
+pip install python-dotenv
+pip install azure-ai-textanalytics==5.3.0
+
 pip freeze > requirements.txt
 ```
