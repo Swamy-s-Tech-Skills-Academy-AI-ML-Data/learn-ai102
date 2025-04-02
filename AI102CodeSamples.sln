@@ -14,9 +14,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CS", "CS", "{E80CFEC4-7036-4ED9-926A-1C7459AC9220}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{25BA7385-FB72-43CB-B279-C181383DB307}"
-	ProjectSection(SolutionItems) = preProject
-		src\Data\A.txt = src\Data\A.txt
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PY", "PY", "{112AC4F7-A77A-4EE9-B341-689253BCA82D}"
 	ProjectSection(SolutionItems) = preProject
