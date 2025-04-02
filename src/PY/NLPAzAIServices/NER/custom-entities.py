@@ -6,6 +6,13 @@ from azure.ai.textanalytics import TextAnalyticsClient
 
 def main():
     try:
+
+        # Specify the path to the .env file
+        env_path = r"D:\DataStores\Envs\.env"
+
+        # Load the .env file from the specified path
+        load_dotenv(dotenv_path=env_path)
+
         # Get Configuration Settings
         load_dotenv()
 
