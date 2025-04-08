@@ -16,6 +16,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{25BA7385-FB72-43CB-B279-C181383DB307}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PY", "PY", "{112AC4F7-A77A-4EE9-B341-689253BCA82D}"
+	ProjectSection(SolutionItems) = preProject
+		src\PY\example.env = src\PY\example.env
+		src\PY\requirements.txt = src\PY\requirements.txt
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzAIServicesCommon", "src\CS\AzAIServicesCommon\AzAIServicesCommon.csproj", "{47CDAE78-BC36-4D1C-A1D8-3DA83B3D4312}"
 EndProject
@@ -32,6 +36,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ads", "ads", "{930B2139-DC4
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NLPAzAIServices", "NLPAzAIServices", "{B435BBBE-CF2B-4339-AE8D-CBB32A7975C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NER", "NER", "{7D9A3EA9-BD17-4404-8DBE-917834CE3B57}"
+	ProjectSection(SolutionItems) = preProject
+		src\PY\NLPAzAIServices\NER\custom-entities.py = src\PY\NLPAzAIServices\NER\custom-entities.py
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +70,7 @@ Global
 		{EE1FFFBC-F829-42EF-AEF6-95E817400B10} = {81B938E3-D683-4CDA-A7F7-2AE70C96C9C5}
 		{930B2139-DC4F-4E90-AE57-A162219E7603} = {EE1FFFBC-F829-42EF-AEF6-95E817400B10}
 		{B435BBBE-CF2B-4339-AE8D-CBB32A7975C3} = {112AC4F7-A77A-4EE9-B341-689253BCA82D}
+		{7D9A3EA9-BD17-4404-8DBE-917834CE3B57} = {B435BBBE-CF2B-4339-AE8D-CBB32A7975C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8B7A83D-681E-47B8-8E99-D8A28C2FEC0D}
