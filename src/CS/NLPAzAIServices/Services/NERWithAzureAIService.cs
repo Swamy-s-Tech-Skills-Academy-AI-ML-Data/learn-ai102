@@ -1,4 +1,6 @@
 ﻿using AzAIServicesCommon.Configuration;
+using Azure;
+using Azure.AI.TextAnalytics;
 
 namespace NLPAzAIServices.Services;
 

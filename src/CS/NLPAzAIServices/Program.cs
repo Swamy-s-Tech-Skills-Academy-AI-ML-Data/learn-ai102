@@ -1,5 +1,8 @@
 ﻿using AzAIServicesCommon.Configuration;
 using AzAIServicesCommon.Extensions;
+using HeaderFooter.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NLPAzAIServices.Services;
 
 using IHost host = IHostExtensions.GetHostBuilder(args);
