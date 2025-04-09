@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
+		<UserSecretsId>12087404-AI102CodeSamples</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
