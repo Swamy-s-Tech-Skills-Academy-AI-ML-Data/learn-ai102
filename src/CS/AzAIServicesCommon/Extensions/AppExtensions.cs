@@ -1,8 +1,4 @@
-﻿using HeaderFooter;
-using HeaderFooter.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AzAIServicesCommon.Extensions;
+﻿namespace AzAIServicesCommon.Extensions;
 
 public static class AppExtensions
 {
