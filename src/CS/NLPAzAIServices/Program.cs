@@ -11,8 +11,7 @@ IHeader header = host.Services.GetRequiredService<IHeader>();
 IFooter footer = host.Services.GetRequiredService<IFooter>();
 AzAISvcAppConfiguration appConfig = host.Services.GetRequiredService<AzAISvcAppConfiguration>();
 
-
-await NERWithAzureAIService.ShowNERDemoWithAzureAIService(appConfig);
+await NERWithAzureAIService.ShowNERDemoWithAzureAIService(appConfig).ConfigureAwait(false);
 
 WriteLine("\n\nPress any key to exit...");
 ReadKey();
