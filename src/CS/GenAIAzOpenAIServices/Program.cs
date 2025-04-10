@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using OpenAI.Chat;
 using System.ClientModel;
 
+#pragma warning disable CA1303
+
 using IHost host = IHostExtensions.GetHostBuilder(args);
 
 IHeader header = host.Services.GetRequiredService<IHeader>();
@@ -53,7 +55,7 @@ do
     userMessage = userMessage.Trim();
     ResetColor();
 
-    if (systemMessage.ToLower() == "quit" || userMessage.ToLower() == "quit")
+    if (systemMessage.Equals("quit", StringComparison.OrdinalIgnoreCase) || userMessage.Equals("quit", StringComparison.OrdinalIgnoreCase))
     {
         ResetColor();
         break;
@@ -67,13 +69,15 @@ do
     {
         // Format and send the request to the model
 
-        GetResponseFromOpenAI(systemMessage, userMessage);
+        await GetResponseFromOpenAI(systemMessage, userMessage).ConfigureAwait(false);
     }
 } while (true);
 
-void GetResponseFromOpenAI(string systemMessage, string userMessage)
+async Task GetResponseFromOpenAI(string systemMessage, string userMessage)
 {
+    ForegroundColor = ConsoleColor.Yellow;
     WriteLine("\nSending prompt to Azure OpenAI endpoint...\n\n");
+    ResetColor();
 
     if (string.IsNullOrEmpty(oaiEndpoint) || string.IsNullOrEmpty(oaiKey) || string.IsNullOrEmpty(oaiDeploymentName))
     {
@@ -82,27 +86,24 @@ void GetResponseFromOpenAI(string systemMessage, string userMessage)
     }
 
     // Get response from Azure OpenAI
-    ChatCompletionOptions chatCompletionOptions = new ChatCompletionOptions()
+    ChatCompletionOptions chatCompletionOptions = new()
     {
         Temperature = 0.7f,
         MaxOutputTokenCount = 800
     };
 
-    ChatCompletion completion = chatClient.CompleteChat(
+    ChatCompletion completion = await chatClient.CompleteChatAsync(
         [
             new SystemChatMessage(systemMessage),
-         new UserChatMessage(userMessage)
+            new UserChatMessage(userMessage)
         ],
         chatCompletionOptions
-    );
+    ).ConfigureAwait(false);
 
-    ForegroundColor = ConsoleColor.DarkYellow;
+    ForegroundColor = ConsoleColor.Cyan;
     WriteLine($"{completion.Role}: {completion.Content[0].Text}");
     ResetColor();
-
 }
-
-ResetColor();
 
 WriteLine("\n\nPress any key to exit...");
 ReadKey();
