@@ -12,6 +12,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Azure.AI.OpenAI" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\AzAIServicesCommon\AzAIServicesCommon.csproj" />
 	</ItemGroup>
 
