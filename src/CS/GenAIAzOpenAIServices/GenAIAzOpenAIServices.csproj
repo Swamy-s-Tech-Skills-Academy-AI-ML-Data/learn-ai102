@@ -13,13 +13,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AzAIServicesCommon\AzAIServicesCommon.csproj" />
+		<ProjectReference Include="..\AzAIServicesCommon\AzAIServicesCommon.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System.Console" Static="true" />
 	</ItemGroup>
 
 </Project>

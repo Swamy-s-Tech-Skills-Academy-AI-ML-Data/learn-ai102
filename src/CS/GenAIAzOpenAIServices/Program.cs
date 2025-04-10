@@ -16,16 +16,13 @@ IHeader header = host.Services.GetRequiredService<IHeader>();
 IFooter footer = host.Services.GetRequiredService<IFooter>();
 AzAISvcAppConfiguration appConfig = host.Services.GetRequiredService<AzAISvcAppConfiguration>();
 
+string? oaiEndpoint;
+string? oaiKey;
+string? oaiDeploymentName;
 
-// Build a config object and retrieve user settings.
-
-static string? oaiEndpoint;
-static string? oaiKey;
-static string? oaiDeploymentName;
-if (string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.NERAIService?.Endpoint)
-        || string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.NERAIService?.Key)
-        || string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.NERAIService?.ProjectName)
-        || string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.NERAIService?.DeploymentName))
+if (string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.GenAIAzOpenAIChatService?.AzureOAIEndpoint)
+        || string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.GenAIAzOpenAIChatService?.AzureOAIKey)
+        || string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.GenAIAzOpenAIChatService?.AzureOAIDeploymentName))
 {
     ForegroundColor = ConsoleColor.Red;
     WriteLine("Please check your appsettings.json file for missing or incorrect values.");
@@ -33,12 +30,12 @@ if (string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.NERAIService?.Endpoint)
     return;
 }
 
-oaiEndpoint = config["AzureOAIEndpoint"];
-oaiKey = config["AzureOAIKey"];
-oaiDeploymentName = config["AzureOAIDeploymentName"];
+oaiEndpoint = appConfig?.GenAIAzOpenAIServices?.GenAIAzOpenAIChatService?.AzureOAIEndpoint;
+oaiKey = appConfig?.GenAIAzOpenAIServices?.GenAIAzOpenAIChatService?.AzureOAIKey;
+oaiDeploymentName = appConfig?.GenAIAzOpenAIServices?.GenAIAzOpenAIChatService?.AzureOAIDeploymentName;
 
 // Configure the Azure OpenAI client
-AzureOpenAIClient azureClient = new(new Uri(oaiEndpoint), new ApiKeyCredential(oaiKey));
+AzureOpenAIClient azureClient = new(new Uri(oaiEndpoint!), new ApiKeyCredential(oaiKey!));
 ChatClient chatClient = azureClient.GetChatClient(oaiDeploymentName);
 
 //Initialize messages list
