@@ -35,29 +35,32 @@ oaiDeploymentName = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.Az
 AzureOpenAIClient azureClient = new(new Uri(oaiEndpoint!), new ApiKeyCredential(oaiKey!));
 ChatClient chatClient = azureClient.GetChatClient(oaiDeploymentName);
 
-//Initialize messages list
-
 do
 {
     // Pause for system message update
-    Console.WriteLine("-----------\nPausing the app to allow you to change the system prompt.\nPress any key to continue...");
-    Console.ReadKey();
+    ForegroundColor = ConsoleColor.White;
+    WriteLine("-----------\nPausing the app to allow you to change the system prompt.\n\nPress any key to continue...");
+    ReadKey();
 
-    Console.WriteLine("\nUsing system message from system.txt");
-    string systemMessage = System.IO.File.ReadAllText("system.txt");
-    systemMessage = systemMessage.Trim();
+    WriteLine("\nUsing system message from system.txt");
+    var folderPath = Path.GetFullPath(@"D:\STSAAIMLDT\learn-ai102\src\Data\GenAI\AOIChat\appdev");
+    var systemFilePath = Path.Combine(folderPath, "system.txt");
+    string systemMessage = File.ReadAllText(systemFilePath).Trim();
 
-    Console.WriteLine("\nEnter user message or type 'quit' to exit:");
-    string userMessage = Console.ReadLine() ?? "";
+    ForegroundColor = ConsoleColor.DarkGreen;
+    WriteLine("\nEnter user message or type 'quit' to exit:");
+    string userMessage = ReadLine() ?? "";
     userMessage = userMessage.Trim();
+    ResetColor();
 
     if (systemMessage.ToLower() == "quit" || userMessage.ToLower() == "quit")
     {
+        ResetColor();
         break;
     }
     else if (string.IsNullOrEmpty(systemMessage) || string.IsNullOrEmpty(userMessage))
     {
-        Console.WriteLine("Please enter a system and user message.");
+        WriteLine("Please enter a system and user message.");
         continue;
     }
     else
@@ -70,11 +73,11 @@ do
 
 void GetResponseFromOpenAI(string systemMessage, string userMessage)
 {
-    Console.WriteLine("\nSending prompt to Azure OpenAI endpoint...\n\n");
+    WriteLine("\nSending prompt to Azure OpenAI endpoint...\n\n");
 
     if (string.IsNullOrEmpty(oaiEndpoint) || string.IsNullOrEmpty(oaiKey) || string.IsNullOrEmpty(oaiDeploymentName))
     {
-        Console.WriteLine("Please check your appsettings.json file for missing or incorrect values.");
+        WriteLine("Please check your appsettings.json file for missing or incorrect values.");
         return;
     }
 
@@ -93,10 +96,13 @@ void GetResponseFromOpenAI(string systemMessage, string userMessage)
         chatCompletionOptions
     );
 
-    Console.WriteLine($"{completion.Role}: {completion.Content[0].Text}");
+    ForegroundColor = ConsoleColor.DarkYellow;
+    WriteLine($"{completion.Role}: {completion.Content[0].Text}");
+    ResetColor();
 
 }
 
+ResetColor();
 
 WriteLine("\n\nPress any key to exit...");
 ReadKey();
