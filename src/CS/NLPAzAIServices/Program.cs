@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLPAzAIServices.Services;
 
+#pragma warning disable CA1303
+
 using IHost host = IHostExtensions.GetHostBuilder(args);
 
 IHeader header = host.Services.GetRequiredService<IHeader>();

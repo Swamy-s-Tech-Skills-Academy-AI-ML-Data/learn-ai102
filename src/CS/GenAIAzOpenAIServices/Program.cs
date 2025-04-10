@@ -51,6 +51,7 @@ do
 
     ForegroundColor = ConsoleColor.DarkGreen;
     WriteLine("\nEnter user message or type 'quit' to exit:");
+    ForegroundColor = ConsoleColor.DarkYellow;
     string userMessage = ReadLine() ?? "";
     userMessage = userMessage.Trim();
     ResetColor();
