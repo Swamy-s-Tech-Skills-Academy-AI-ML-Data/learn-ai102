@@ -3,12 +3,10 @@ using AzAIServicesCommon.Configuration;
 using AzAIServicesCommon.Extensions;
 using Azure.AI.OpenAI;
 using HeaderFooter.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenAI.Chat;
 using System.ClientModel;
-using System.Reflection.PortableExecutable;
 
 using IHost host = IHostExtensions.GetHostBuilder(args);
 
