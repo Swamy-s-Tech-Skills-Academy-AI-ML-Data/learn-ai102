@@ -1,5 +1,4 @@
-﻿// Implicit using statements are included
-using AzAIServicesCommon.Configuration;
+﻿using AzAIServicesCommon.Configuration;
 using AzAIServicesCommon.Extensions;
 using Azure.AI.OpenAI;
 using HeaderFooter.Interfaces;
