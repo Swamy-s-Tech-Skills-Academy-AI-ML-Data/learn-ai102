@@ -26,7 +26,7 @@ public sealed class NERAIService
 
 public sealed class GenAIAzOpenAIServices
 {
-    public AzureOpenAIChatService? GenAIAzOpenAIChatService { get; set; }
+    public AzureOpenAIChatService? AzureOpenAIChatService { get; set; }
 }
 
 public sealed class AzureOpenAIChatService
