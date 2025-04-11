@@ -6,15 +6,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.AI.OpenAI" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+		<PackageReference Include="Azure.AI.OpenAI" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\AzAIServicesCommon\AzAIServicesCommon.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System.Console" Static="true" />
 	</ItemGroup>
 
 </Project>

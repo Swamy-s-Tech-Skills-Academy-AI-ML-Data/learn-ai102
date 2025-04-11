@@ -4,6 +4,8 @@ using Azure.AI.TextAnalytics;
 
 namespace NLPAzAIServices.Services;
 
+#pragma warning disable CA1303
+
 internal sealed class NERWithAzureAIService
 {
     public static async Task ShowNERDemoWithAzureAIService(AzAISvcAppConfiguration appConfig)
@@ -41,7 +43,7 @@ internal sealed class NERWithAzureAIService
             {
                 // Read the file contents
                 StreamReader sr = file.OpenText();
-                var text = sr.ReadToEnd();
+                var text = await sr.ReadToEndAsync().ConfigureAwait(false);
                 sr.Close();
 
                 TextDocumentInput doc = new(file.Name, text)
@@ -52,9 +54,9 @@ internal sealed class NERWithAzureAIService
             }
 
             // Extract entities
-            RecognizeCustomEntitiesOperation operation = await aiClient.RecognizeCustomEntitiesAsync(WaitUntil.Completed, batchedDocuments, appConfig?.NLPAzAIServices?.NERAIService?.ProjectName, appConfig?.NLPAzAIServices?.NERAIService?.DeploymentName);
+            RecognizeCustomEntitiesOperation operation = await aiClient.RecognizeCustomEntitiesAsync(WaitUntil.Completed, batchedDocuments, appConfig?.NLPAzAIServices?.NERAIService?.ProjectName, appConfig?.NLPAzAIServices?.NERAIService?.DeploymentName).ConfigureAwait(false);
 
-            await foreach (RecognizeCustomEntitiesResultCollection documentsInPage in operation.Value)
+            await foreach (RecognizeCustomEntitiesResultCollection documentsInPage in operation.Value.ConfigureAwait(false))
             {
                 foreach (RecognizeEntitiesResult documentResult in documentsInPage)
                 {
@@ -90,6 +92,7 @@ internal sealed class NERWithAzureAIService
         {
             ForegroundColor = ConsoleColor.Red;
             WriteLine(ex.Message);
+            throw;
         }
         finally
         {

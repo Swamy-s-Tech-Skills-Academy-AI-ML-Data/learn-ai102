@@ -15,7 +15,7 @@ public static class IHostExtensions
                     IConfiguration configuration = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .AddUserSecrets("12087404-AI102CodeSamples")
+                        .AddUserSecrets("12087404-AI102CodeSamples", true)
                         .Build();
 
                     AzAISvcAppConfiguration appConfig = new();

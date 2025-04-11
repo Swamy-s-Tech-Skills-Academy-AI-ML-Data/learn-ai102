@@ -1,81 +1,140 @@
-﻿// Implicit using statements are included
-using Microsoft.Extensions.Configuration;
+﻿using AzAIServicesCommon.Configuration;
+using AzAIServicesCommon.Extensions;
+using Azure.AI.OpenAI;
+using HeaderFooter.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using OpenAI.Chat;
+using System.ClientModel;
 
-// Add Azure OpenAI packages
+#pragma warning disable CA1303
 
+using IHost host = IHostExtensions.GetHostBuilder(args);
 
-// Build a config object and retrieve user settings.
-class ChatMessageLab
+IHeader header = host.Services.GetRequiredService<IHeader>();
+IFooter footer = host.Services.GetRequiredService<IFooter>();
+AzAISvcAppConfiguration appConfig = host.Services.GetRequiredService<AzAISvcAppConfiguration>();
+
+string? oaiEndpoint;
+string? oaiKey;
+string? oaiDeploymentName;
+bool sendGroundingContext = true;
+ChatCompletionOptions chatCompletionOptions = new()
 {
+    Temperature = 0.7f,
+    MaxOutputTokenCount = 800
+};
 
-    static string? oaiEndpoint;
-    static string? oaiKey;
-    static string? oaiDeploymentName;
-    static void Main(string[] args)
+if (string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIEndpoint)
+                || string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIKey)
+                || string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIDeploymentName))
+{
+    ForegroundColor = ConsoleColor.Red;
+    WriteLine("Please check your appsettings.json file for missing or incorrect values.");
+
+    return;
+}
+
+oaiEndpoint = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIEndpoint;
+oaiKey = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIKey;
+oaiDeploymentName = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIDeploymentName;
+
+// Configure the Azure OpenAI client
+AzureOpenAIClient azureClient = new(new Uri(oaiEndpoint!), new ApiKeyCredential(oaiKey!));
+ChatClient chatClient = azureClient.GetChatClient(oaiDeploymentName);
+
+var folderPath = Path.GetFullPath(@"D:\STSAAIMLDT\learn-ai102\src\Data\GenAI\AOIChat\appdev");
+
+do
+{
+    // Pause for system message update
+    ForegroundColor = ConsoleColor.White;
+    WriteLine("-----------\nPausing the app to allow you to change the system prompt.\n\nPress any key to continue...");
+    ReadKey();
+
+    WriteLine("\nUsing system message from system.txt");
+    var systemFilePath = Path.Combine(folderPath, "system.txt");
+    string systemMessage = await File.ReadAllTextAsync(systemFilePath).ConfigureAwait(false);
+    systemMessage = systemMessage.Trim();
+
+    ForegroundColor = ConsoleColor.DarkGreen;
+    WriteLine("\nEnter user message or type 'quit' to exit:");
+    ForegroundColor = ConsoleColor.Green;
+    string userMessage = ReadLine() ?? "";
+    userMessage = userMessage.Trim();
+    ResetColor();
+
+    if (systemMessage.Equals("quit", StringComparison.OrdinalIgnoreCase) || userMessage.Equals("quit", StringComparison.OrdinalIgnoreCase))
     {
-        IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        oaiEndpoint = config["AzureOAIEndpoint"];
-        oaiKey = config["AzureOAIKey"];
-        oaiDeploymentName = config["AzureOAIDeploymentName"];
-
-        //Initialize messages list
-
-        do
-        {
-            // Pause for system message update
-            Console.WriteLine("-----------\nPausing the app to allow you to change the system prompt.\nPress any key to continue...");
-            Console.ReadKey();
-
-            Console.WriteLine("\nUsing system message from system.txt");
-            string systemMessage = System.IO.File.ReadAllText("system.txt");
-            systemMessage = systemMessage.Trim();
-
-            Console.WriteLine("\nEnter user message or type 'quit' to exit:");
-            string userMessage = Console.ReadLine() ?? "";
-            userMessage = userMessage.Trim();
-
-            if (systemMessage.ToLower() == "quit" || userMessage.ToLower() == "quit")
-            {
-                break;
-            }
-            else if (string.IsNullOrEmpty(systemMessage) || string.IsNullOrEmpty(userMessage))
-            {
-                Console.WriteLine("Please enter a system and user message.");
-                continue;
-            }
-            else
-            {
-                // Format and send the request to the model
-
-                GetResponseFromOpenAI(systemMessage, userMessage);
-            }
-        } while (true);
-
+        ResetColor();
+        break;
     }
-
-    // Define the function that gets the response from Azure OpenAI endpoint
-    private static void GetResponseFromOpenAI(string systemMessage, string userMessage)
+    else if (string.IsNullOrEmpty(systemMessage) || string.IsNullOrEmpty(userMessage))
     {
-        Console.WriteLine("\nSending prompt to Azure OpenAI endpoint...\n\n");
-
-        if (string.IsNullOrEmpty(oaiEndpoint) || string.IsNullOrEmpty(oaiKey) || string.IsNullOrEmpty(oaiDeploymentName))
+        WriteLine("Please enter a system and user message.");
+        continue;
+    }
+    else
+    {
+        if (sendGroundingContext)
         {
-            Console.WriteLine("Please check your appsettings.json file for missing or incorrect values.");
-            return;
+            // Initialize messages list
+            WriteLine("\nAdding grounding context from grounding.txt");
+            var groundingFilePath = Path.Combine(folderPath, "grounding.txt");
+            string groundingText = await File.ReadAllTextAsync(groundingFilePath).ConfigureAwait(false);
+            groundingText = groundingText.Trim();
+
+            // Format and send the request to the model
+            var messagesList = new List<ChatMessage>
+            {
+                new UserChatMessage(groundingText),
+                new SystemChatMessage(systemMessage),
+                new UserChatMessage(userMessage)
+            };
+
+            await GetResponseFromOpenAIV1(chatClient, chatCompletionOptions, messagesList).ConfigureAwait(false);
         }
 
-        // Configure the Azure OpenAI client
-
-
-
-        // Get response from Azure OpenAI
-
-
-
-
+        await GetResponseFromOpenAI(chatClient, chatCompletionOptions, systemMessage, userMessage).ConfigureAwait(false);
     }
+} while (true);
 
+async Task GetResponseFromOpenAIV1(ChatClient chatClient, ChatCompletionOptions chatCompletionOptions, List<ChatMessage> messagesList)
+{
+    ForegroundColor = ConsoleColor.DarkYellow;
+    WriteLine("\nSending prompt to Azure OpenAI endpoint WITH Grounding Context...\n\n");
+    ResetColor();
+
+    // Get response from Azure OpenAI
+    ChatCompletion completion = await chatClient.CompleteChatAsync(
+        messagesList,
+        chatCompletionOptions
+    ).ConfigureAwait(false);
+
+    ForegroundColor = ConsoleColor.Yellow;
+    WriteLine($"{completion.Role}: {completion.Content[0].Text}");
+    messagesList.Add(new AssistantChatMessage(completion.Content[0].Text));
 }
+
+async Task GetResponseFromOpenAI(ChatClient chatClient, ChatCompletionOptions chatCompletionOptions, string systemMessage, string userMessage)
+{
+    ForegroundColor = ConsoleColor.DarkCyan;
+    WriteLine("\nSending prompt to Azure OpenAI endpoint WITHOUT Grounding Context ...\n\n");
+    ResetColor();
+
+    // Get response from Azure OpenAI
+    ChatCompletion completion = await chatClient.CompleteChatAsync(
+        [
+            new SystemChatMessage(systemMessage),
+            new UserChatMessage(userMessage)
+        ],
+        chatCompletionOptions
+    ).ConfigureAwait(false);
+
+    ForegroundColor = ConsoleColor.Cyan;
+    WriteLine($"{completion.Role}: {completion.Content[0].Text}\n\n");
+    ResetColor();
+}
+
+WriteLine("\n\nPress any key to exit...");
+ReadKey();
