@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenAI.Chat;
 using System.ClientModel;
+using System.Text;
 
 #pragma warning disable CA1303
 
@@ -15,10 +16,16 @@ IHeader header = host.Services.GetRequiredService<IHeader>();
 IFooter footer = host.Services.GetRequiredService<IFooter>();
 AzAISvcAppConfiguration appConfig = host.Services.GetRequiredService<AzAISvcAppConfiguration>();
 
+// Set console output to UTF-8
+Console.OutputEncoding = Encoding.UTF8;
+
+// Optional: Set input encoding if reading Unicode input
+Console.InputEncoding = Encoding.UTF8;
+
 string? oaiEndpoint;
 string? oaiKey;
 string? oaiDeploymentName;
-bool sendGroundingContext = true;
+bool sendGroundingContext = false;
 ChatCompletionOptions chatCompletionOptions = new()
 {
     Temperature = 0.7f,
