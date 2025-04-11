@@ -7,7 +7,7 @@ namespace GenAIAzOpenAIServices.Services;
 
 #pragma warning disable CA1303
 
-internal sealed class AzureOpenAIChatCompletion
+internal sealed class AzureOpenAIChatCompletion(AzAISvcAppConfiguration appConfig)
 {
     private static string? oaiEndpoint;
     private static string? oaiKey;
@@ -17,6 +17,7 @@ internal sealed class AzureOpenAIChatCompletion
         Temperature = 0.7f,
         MaxOutputTokenCount = 800
     };
+    private readonly AzAISvcAppConfiguration _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
 
     public static async Task ShowChatCompletionDemowithAzAOI(AzAISvcAppConfiguration appConfig)
     {
