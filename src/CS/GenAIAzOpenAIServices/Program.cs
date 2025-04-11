@@ -20,7 +20,7 @@ Console.OutputEncoding = Encoding.UTF8;
 // Optional: Set input encoding if reading Unicode input
 Console.InputEncoding = Encoding.UTF8;
 
-await AzureOpenAIChatCompletion.ShowChatCompletionDemowithAzAOI(appConfig).ConfigureAwait(false);
+await new AzureOpenAIChatCompletion(appConfig).ShowChatCompletionDemowithAzAOI().ConfigureAwait(false);
 
 WriteLine("\n\nPress any key to exit...");
 ReadKey();

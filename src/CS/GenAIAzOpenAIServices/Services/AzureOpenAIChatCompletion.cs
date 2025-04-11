@@ -7,7 +7,7 @@ namespace GenAIAzOpenAIServices.Services;
 
 #pragma warning disable CA1303
 
-internal sealed class AzureOpenAIChatCompletion(AzAISvcAppConfiguration appConfig)
+internal sealed class AzureOpenAIChatCompletion(AzAISvcAppConfiguration azAISvcAppConfiguration)
 {
     private static string? oaiEndpoint;
     private static string? oaiKey;
@@ -17,13 +17,13 @@ internal sealed class AzureOpenAIChatCompletion(AzAISvcAppConfiguration appConfi
         Temperature = 0.7f,
         MaxOutputTokenCount = 800
     };
-    private readonly AzAISvcAppConfiguration _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+    private readonly AzAISvcAppConfiguration _azAISvcAppConfiguration = azAISvcAppConfiguration ?? throw new ArgumentNullException(nameof(azAISvcAppConfiguration));
 
-    public static async Task ShowChatCompletionDemowithAzAOI(AzAISvcAppConfiguration appConfig)
+    public async Task ShowChatCompletionDemowithAzAOI()
     {
-        if (string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIEndpoint)
-                || string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIKey)
-                || string.IsNullOrEmpty(appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIDeploymentName))
+        if (string.IsNullOrEmpty(_azAISvcAppConfiguration?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIEndpoint)
+                || string.IsNullOrEmpty(_azAISvcAppConfiguration?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIKey)
+                || string.IsNullOrEmpty(_azAISvcAppConfiguration?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIDeploymentName))
         {
             ForegroundColor = ConsoleColor.Red;
             WriteLine("Please check your appsettings.json file for missing or incorrect values.");
@@ -31,9 +31,9 @@ internal sealed class AzureOpenAIChatCompletion(AzAISvcAppConfiguration appConfi
             return;
         }
 
-        oaiEndpoint = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIEndpoint;
-        oaiKey = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIKey;
-        oaiDeploymentName = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIDeploymentName;
+        oaiEndpoint = _azAISvcAppConfiguration?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIEndpoint;
+        oaiKey = _azAISvcAppConfiguration?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIKey;
+        oaiDeploymentName = _azAISvcAppConfiguration?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIDeploymentName;
         bool sendGroundingContext = false;
 
         // Configure the Azure OpenAI client
