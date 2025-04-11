@@ -12,8 +12,7 @@ internal sealed class AzureOpenAIChatCompletion
     private static string? oaiEndpoint;
     private static string? oaiKey;
     private static string? oaiDeploymentName;
-    private static bool sendGroundingContext;
-    private static ChatCompletionOptions chatCompletionOptions = new()
+    private static readonly ChatCompletionOptions chatCompletionOptions = new()
     {
         Temperature = 0.7f,
         MaxOutputTokenCount = 800
@@ -34,6 +33,7 @@ internal sealed class AzureOpenAIChatCompletion
         oaiEndpoint = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIEndpoint;
         oaiKey = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIKey;
         oaiDeploymentName = appConfig?.GenAIAzOpenAIServices?.AzureOpenAIChatService?.AzureOAIDeploymentName;
+        bool sendGroundingContext = false;
 
         // Configure the Azure OpenAI client
         AzureOpenAIClient azureClient = new(new Uri(oaiEndpoint!), new ApiKeyCredential(oaiKey!));
