@@ -7,6 +7,7 @@ using Microsoft.CognitiveServices.Speech.Translation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Text;
+using System.Media;
 
 #pragma warning disable CA1303
 
@@ -26,8 +27,8 @@ InputEncoding = Encoding.Unicode;
 SpeechConfig speechConfig;
 SpeechTranslationConfig translationConfig;
 
-if (string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Endpoint) || 
-    string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Key) || 
+if (string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Endpoint) ||
+    string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Key) ||
     string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Region))
 {
     WriteLine("Please check your appsettings.json file for missing or incorrect values.");
@@ -75,17 +76,30 @@ async Task Translate(string targetLanguage)
 {
     string translation = "";
 
-    // Translate speech
-    using AudioConfig audioConfig = AudioConfig.FromDefaultMicrophoneInput();
-    using TranslationRecognizer translator = new(translationConfig, audioConfig);
+    //// Translate speech from microphone
+    //using AudioConfig audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+    //using TranslationRecognizer translator = new(translationConfig, audioConfig);
 
-    WriteLine("Speak now...");
+    //WriteLine("Speak now...");
+    //TranslationRecognitionResult result = await translator.RecognizeOnceAsync();
+    //WriteLine($"Translating '{result.Text}'");
+    //translation = result.Translations[targetLanguage];
+    //OutputEncoding = Encoding.UTF8;
+    //WriteLine(translation);
+
+    // Translate speech from file
+    string audioFile = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
+    SoundPlayer wavPlayer = new(audioFile);
+    wavPlayer.Play();
+    using AudioConfig audioConfig = AudioConfig.FromWavFileInput(audioFile);
+    using TranslationRecognizer translator = new(translationConfig, audioConfig);
+    WriteLine("Getting speech from file...");
     TranslationRecognitionResult result = await translator.RecognizeOnceAsync();
     WriteLine($"Translating '{result.Text}'");
     translation = result.Translations[targetLanguage];
     OutputEncoding = Encoding.UTF8;
     WriteLine(translation);
-
+    
     // Synthesize translation
 
     await Task.CompletedTask.ConfigureAwait(false);
