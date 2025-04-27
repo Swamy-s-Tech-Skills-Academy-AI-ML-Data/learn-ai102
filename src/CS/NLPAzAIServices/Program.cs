@@ -6,8 +6,8 @@ using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.CognitiveServices.Speech.Translation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Text;
 using System.Media;
+using System.Text;
 
 #pragma warning disable CA1303
 
@@ -99,7 +99,7 @@ async Task Translate(string targetLanguage)
     translation = result.Translations[targetLanguage];
     OutputEncoding = Encoding.UTF8;
     WriteLine(translation);
-    
+
     // Synthesize translation
 
     await Task.CompletedTask.ConfigureAwait(false);
