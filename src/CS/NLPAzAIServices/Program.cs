@@ -2,6 +2,8 @@
 using AzAIServicesCommon.Extensions;
 using HeaderFooter.Interfaces;
 using Microsoft.CognitiveServices.Speech;
+using Microsoft.CognitiveServices.Speech.Audio;
+using Microsoft.CognitiveServices.Speech.Translation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Text;
@@ -24,7 +26,9 @@ InputEncoding = Encoding.Unicode;
 SpeechConfig speechConfig;
 SpeechTranslationConfig translationConfig;
 
-if (string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.SpeechEndpoint) || string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.SpeechKey) || string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.SpeechRegion))
+if (string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Endpoint) || 
+    string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Key) || 
+    string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.Region))
 {
     WriteLine("Please check your appsettings.json file for missing or incorrect values.");
     return;
@@ -33,8 +37,8 @@ if (string.IsNullOrEmpty(appConfig?.NLPAzAIServices?.SpeechAIService?.SpeechEndp
 try
 {
     // Get config settings from AppSettings
-    string aiSvcKey = appConfig?.NLPAzAIServices?.SpeechAIService?.SpeechKey!;
-    string aiSvcRegion = appConfig?.NLPAzAIServices?.SpeechAIService?.SpeechRegion!;
+    string aiSvcKey = appConfig?.NLPAzAIServices?.SpeechAIService?.Key!;
+    string aiSvcRegion = appConfig?.NLPAzAIServices?.SpeechAIService?.Region!;
 
     // Configure translation
     translationConfig = SpeechTranslationConfig.FromSubscription(aiSvcKey, aiSvcRegion);
@@ -42,16 +46,16 @@ try
     translationConfig.AddTargetLanguage("fr");
     translationConfig.AddTargetLanguage("es");
     translationConfig.AddTargetLanguage("hi");
-    Console.WriteLine("Ready to translate from " + translationConfig.SpeechRecognitionLanguage);
+    WriteLine("Ready to translate from " + translationConfig.SpeechRecognitionLanguage);
 
     // Configure speech
-
+    speechConfig = SpeechConfig.FromSubscription(aiSvcKey, aiSvcRegion);
 
     string targetLanguage = "";
     while (targetLanguage != "quit")
     {
-        Console.WriteLine("\nEnter a target language\n fr = French\n es = Spanish\n hi = Hindi\n Enter anything else to stop\n");
-        targetLanguage = Console.ReadLine().ToLower();
+        WriteLine("\nEnter a target language\n fr = French\n es = Spanish\n hi = Hindi\n Enter anything else to stop\n");
+        targetLanguage = ReadLine()?.ToLowerInvariant()!;
         if (translationConfig.TargetLanguages.Contains(targetLanguage))
         {
             await Translate(targetLanguage);
@@ -64,7 +68,7 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex.Message);
+    WriteLine(ex.Message);
 }
 
 async Task Translate(string targetLanguage)
@@ -72,11 +76,19 @@ async Task Translate(string targetLanguage)
     string translation = "";
 
     // Translate speech
+    using AudioConfig audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+    using TranslationRecognizer translator = new(translationConfig, audioConfig);
 
+    WriteLine("Speak now...");
+    TranslationRecognitionResult result = await translator.RecognizeOnceAsync();
+    WriteLine($"Translating '{result.Text}'");
+    translation = result.Translations[targetLanguage];
+    OutputEncoding = Encoding.UTF8;
+    WriteLine(translation);
 
     // Synthesize translation
 
-
+    await Task.CompletedTask.ConfigureAwait(false);
 }
 
 // ******************** 8. Translate Speech ********************

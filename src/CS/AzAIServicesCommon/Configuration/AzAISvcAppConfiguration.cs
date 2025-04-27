@@ -42,10 +42,10 @@ public sealed class AzureOpenAIChatService
 
 public sealed class SpeechAIService
 {
-    public string? SpeechEndpoint { get; set; }
+    public string? Endpoint { get; set; }
 
-    public string? SpeechKey { get; set; }
+    public string? Key { get; set; }
 
-    public string? SpeechRegion { get; set; }
+    public string? Region { get; set; }
 }
 
