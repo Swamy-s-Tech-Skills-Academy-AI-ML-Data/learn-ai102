@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Azure.AI.TextAnalytics" />
+		<PackageReference Include="Microsoft.CognitiveServices.Speech" />
 	</ItemGroup>
 
 	<ItemGroup>
