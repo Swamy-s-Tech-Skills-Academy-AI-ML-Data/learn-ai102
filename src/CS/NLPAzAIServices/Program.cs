@@ -1,12 +1,9 @@
 ﻿using AzAIServicesCommon.Configuration;
 using AzAIServicesCommon.Extensions;
 using HeaderFooter.Interfaces;
-using Microsoft.CognitiveServices.Speech;
-using Microsoft.CognitiveServices.Speech.Audio;
-using Microsoft.CognitiveServices.Speech.Translation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Media;
+using NLPAzAIServices.Services;
 using System.Text;
 
 #pragma warning disable CA1303
@@ -27,7 +24,7 @@ InputEncoding = Encoding.Unicode;
 
 // ******************** 8. Translate Speech ********************
 
-//await NERWithAzureAIService.ShowNERDemoWithAzureAIService(appConfig).ConfigureAwait(false);
+await NERWithAzureAIService.ShowNERDemoWithAzureAIService(appConfig).ConfigureAwait(false);
 
 WriteLine("\n\nPress any key to exit...");
 ReadKey();

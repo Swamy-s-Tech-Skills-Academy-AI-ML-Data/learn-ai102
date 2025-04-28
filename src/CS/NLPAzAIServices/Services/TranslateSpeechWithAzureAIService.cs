@@ -7,8 +7,13 @@ using System.Text;
 
 namespace NLPAzAIServices.Services;
 
+#pragma warning disable CA1303
+#pragma warning disable CA1308
+#pragma warning disable CA1031
+
 internal sealed class TranslateSpeechWithAzureAIService
 {
+
     public static async Task ShowTranslateSpeechDemoWithAzureAIService(AzAISvcAppConfiguration appConfig)
     {
         SpeechConfig speechConfig;
@@ -46,7 +51,7 @@ internal sealed class TranslateSpeechWithAzureAIService
                 targetLanguage = ReadLine()?.ToLowerInvariant()!;
                 if (translationConfig.TargetLanguages.Contains(targetLanguage))
                 {
-                    await Translate(targetLanguage);
+                    await Translate(targetLanguage, speechConfig, translationConfig).ConfigureAwait(false);
                 }
                 else
                 {
@@ -61,7 +66,7 @@ internal sealed class TranslateSpeechWithAzureAIService
 
     }
 
-    private async Task Translate(string targetLanguage)
+    private static async Task Translate(string targetLanguage, SpeechConfig speechConfig, SpeechTranslationConfig translationConfig)
     {
         string translation = "";
 
@@ -80,11 +85,14 @@ internal sealed class TranslateSpeechWithAzureAIService
         string audioFile = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
         SoundPlayer wavPlayer = new(audioFile);
         wavPlayer.Play();
+
         using AudioConfig audioConfig = AudioConfig.FromWavFileInput(audioFile);
         using TranslationRecognizer translator = new(translationConfig, audioConfig);
+        
         WriteLine("Getting speech from file...");
-        TranslationRecognitionResult result = await translator.RecognizeOnceAsync();
+        TranslationRecognitionResult result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
         WriteLine($"Translating '{result.Text}'");
+        
         translation = result.Translations[targetLanguage];
         OutputEncoding = Encoding.UTF8;
         WriteLine(translation);
@@ -97,12 +105,13 @@ internal sealed class TranslateSpeechWithAzureAIService
             ["hi"] = "hi-IN-MadhurNeural"
         };
         speechConfig.SpeechSynthesisVoiceName = voices[targetLanguage];
+
         using SpeechSynthesizer speechSynthesizer = new(speechConfig);
-        SpeechSynthesisResult speak = await speechSynthesizer.SpeakTextAsync(translation);
+
+        SpeechSynthesisResult speak = await speechSynthesizer.SpeakTextAsync(translation).ConfigureAwait(false);
         if (speak.Reason != ResultReason.SynthesizingAudioCompleted)
         {
             WriteLine(speak.Reason);
         }
-        await Task.CompletedTask.ConfigureAwait(false);
     }
 }
