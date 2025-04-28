@@ -10,6 +10,8 @@ public sealed class AzAISvcAppConfiguration
 public sealed class NLPAzAIServices
 {
     public NERAIService? NERAIService { get; set; }
+
+    public SpeechAIService? SpeechAIService { get; set; }
 }
 
 
@@ -36,5 +38,14 @@ public sealed class AzureOpenAIChatService
     public string? AzureOAIKey { get; set; }
 
     public string? AzureOAIDeploymentName { get; set; }
+}
+
+public sealed class SpeechAIService
+{
+    public string? Endpoint { get; set; }
+
+    public string? Key { get; set; }
+
+    public string? Region { get; set; }
 }
 

@@ -23,8 +23,6 @@ internal sealed class NERWithAzureAIService
                 return;
             }
 
-            ForegroundColor = ConsoleColor.DarkGreen;
-
             WriteLine("NER with Azure AI Service");
 
             // Create client using endpoint and key
@@ -60,8 +58,10 @@ internal sealed class NERWithAzureAIService
             {
                 foreach (RecognizeEntitiesResult documentResult in documentsInPage)
                 {
+                    ForegroundColor = ConsoleColor.Yellow;
                     WriteLine($"Result for \"{documentResult.Id}\":");
 
+                    ForegroundColor = ConsoleColor.DarkGreen;
                     if (documentResult.HasError)
                     {
                         WriteLine($"  Error!");

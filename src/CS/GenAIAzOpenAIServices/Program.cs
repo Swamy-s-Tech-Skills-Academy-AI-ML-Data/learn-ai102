@@ -15,10 +15,10 @@ IFooter footer = host.Services.GetRequiredService<IFooter>();
 AzAISvcAppConfiguration appConfig = host.Services.GetRequiredService<AzAISvcAppConfiguration>();
 
 // Set console output to UTF-8
-Console.OutputEncoding = Encoding.UTF8;
+OutputEncoding = Encoding.UTF8;
 
 // Optional: Set input encoding if reading Unicode input
-Console.InputEncoding = Encoding.UTF8;
+InputEncoding = Encoding.UTF8;
 
 await new AzureOpenAIChatCompletion(appConfig).ShowChatCompletionDemowithAzAOI().ConfigureAwait(false);
 
