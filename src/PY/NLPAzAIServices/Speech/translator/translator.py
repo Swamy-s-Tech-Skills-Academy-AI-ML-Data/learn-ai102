@@ -10,8 +10,15 @@ def main():
         global speech_config
         global translation_config
 
+        # Specify the path to the .env file
+        env_path = r"D:\DataStores\Envs\.env"
+
+        # Load the .env file from the specified path
+        load_dotenv(dotenv_path=env_path)
+
         # Get Configuration Settings
         load_dotenv()
+
         ai_key = os.getenv('SPEECH_KEY')
         ai_region = os.getenv('SPEECH_REGION')
 
