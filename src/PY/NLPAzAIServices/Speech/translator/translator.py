@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 # Import namespaces
 import azure.cognitiveservices.speech as speech_sdk
-
+from playsound import playsound
 
 def main():
     try:
@@ -52,11 +52,22 @@ def main():
 def Translate(targetLanguage):
     translation = ''
 
-    # Translate speech using the default microphone
-    audio_config = speech_sdk.AudioConfig(use_default_microphone=True)
-    translator = speech_sdk.translation.TranslationRecognizer(
-        translation_config, audio_config=audio_config)
-    print("Speak now...")
+    # # Translate speech using the default microphone
+    # audio_config = speech_sdk.AudioConfig(use_default_microphone=True)
+    # translator = speech_sdk.translation.TranslationRecognizer(
+    #     translation_config, audio_config=audio_config)
+    # print("Speak now...")
+    # result = translator.recognize_once_async().get()
+    # print('Translating "{}"'.format(result.text))
+    # translation = result.translations[targetLanguage]
+    # print(translation)
+
+    # Translate speech
+    print("Getting speech from file...")
+    audioFile = r'D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav'
+    playsound(audioFile)
+    audio_config = speech_sdk.AudioConfig(filename=audioFile)
+    translator = speech_sdk.translation.TranslationRecognizer(translation_config, audio_config = audio_config)
     result = translator.recognize_once_async().get()
     print('Translating "{}"'.format(result.text))
     translation = result.translations[targetLanguage]
