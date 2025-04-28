@@ -63,6 +63,16 @@ def Translate(targetLanguage):
     print(translation)
 
     # Synthesize translation
+    voices = {
+        "fr": "fr-FR-HenriNeural",
+        "es": "es-ES-ElviraNeural",
+        "hi": "hi-IN-MadhurNeural"
+    }
+    speech_config.speech_synthesis_voice_name = voices.get(targetLanguage)
+    speech_synthesizer = speech_sdk.SpeechSynthesizer(speech_config)
+    speak = speech_synthesizer.speak_text_async(translation).get()
+    if speak.reason != speech_sdk.ResultReason.SynthesizingAudioCompleted:
+        print(speak.reason)
 
 
 if __name__ == "__main__":
