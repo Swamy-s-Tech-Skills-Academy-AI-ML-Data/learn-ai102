@@ -20,7 +20,9 @@ OutputEncoding = Encoding.Unicode;
 // Optional: Set input encoding if reading Unicode input
 InputEncoding = Encoding.Unicode;
 
+// ******************** 5. Named Entity Recognition ********************
 await NERWithAzureAIService.ShowNERDemoWithAzureAIService(appConfig).ConfigureAwait(false);
+// ******************** 5. Named Entity Recognition ********************
 
 // ******************** 8. Translate Speech ********************
 await TranslateSpeechWithAzureAIService.ShowTranslateSpeechDemoWithAzureAIService(appConfig).ConfigureAwait(false);
