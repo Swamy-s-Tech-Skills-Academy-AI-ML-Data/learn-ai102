@@ -83,16 +83,27 @@ internal sealed class TranslateSpeechWithAzureAIService
 
         // Translate speech from file
         string audioFile = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
-        SoundPlayer wavPlayer = new(audioFile);
-        wavPlayer.Play();
+        //SoundPlayer wavPlayer = new(audioFile);
+        //wavPlayer.Play();
+
+        // Platform-specific audio playback
+        if (OperatingSystem.IsWindows())
+        {
+            using SoundPlayer wavPlayer = new(audioFile);
+            wavPlayer.Play();
+        }
+        else
+        {
+            WriteLine("Audio playback not supported on this platform. Continuing with translation...");
+        }
 
         using AudioConfig audioConfig = AudioConfig.FromWavFileInput(audioFile);
         using TranslationRecognizer translator = new(translationConfig, audioConfig);
-        
+
         WriteLine("Getting speech from file...");
         TranslationRecognitionResult result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
         WriteLine($"Translating '{result.Text}'");
-        
+
         translation = result.Translations[targetLanguage];
         OutputEncoding = Encoding.UTF8;
         WriteLine(translation);

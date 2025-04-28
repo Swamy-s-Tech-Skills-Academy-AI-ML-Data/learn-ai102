@@ -20,11 +20,11 @@ OutputEncoding = Encoding.Unicode;
 // Optional: Set input encoding if reading Unicode input
 InputEncoding = Encoding.Unicode;
 
-// ******************** 8. Translate Speech ********************
-
-// ******************** 8. Translate Speech ********************
-
 await NERWithAzureAIService.ShowNERDemoWithAzureAIService(appConfig).ConfigureAwait(false);
+
+// ******************** 8. Translate Speech ********************
+await TranslateSpeechWithAzureAIService.ShowTranslateSpeechDemoWithAzureAIService(appConfig).ConfigureAwait(false);
+// ******************** 8. Translate Speech ********************
 
 WriteLine("\n\nPress any key to exit...");
 ReadKey();
