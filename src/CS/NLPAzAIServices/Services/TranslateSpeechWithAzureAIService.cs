@@ -70,18 +70,19 @@ internal sealed class TranslateSpeechWithAzureAIService
     {
         string translation = "";
 
-        //// Translate speech from microphone
+        // ******************** Translate speech from microphone ********************
         //using AudioConfig audioConfig = AudioConfig.FromDefaultMicrophoneInput();
         //using TranslationRecognizer translator = new(translationConfig, audioConfig);
 
         //WriteLine("Speak now...");
-        //TranslationRecognitionResult result = await translator.RecognizeOnceAsync();
+        //TranslationRecognitionResult result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
         //WriteLine($"Translating '{result.Text}'");
         //translation = result.Translations[targetLanguage];
         //OutputEncoding = Encoding.UTF8;
         //WriteLine(translation);
+        // ******************** Translate speech from microphone ********************
 
-        // Translate speech from file
+        // ******************** Translate speech from file ********************
         string audioFile = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
         //SoundPlayer wavPlayer = new(audioFile);
         //wavPlayer.Play();
@@ -107,6 +108,7 @@ internal sealed class TranslateSpeechWithAzureAIService
         translation = result.Translations[targetLanguage];
         OutputEncoding = Encoding.UTF8;
         WriteLine(translation);
+        // ******************** Translate speech from file ********************
 
         // Synthesize translation
         var voices = new Dictionary<string, string>
