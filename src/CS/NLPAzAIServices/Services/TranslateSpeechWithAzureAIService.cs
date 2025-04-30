@@ -68,7 +68,6 @@ internal sealed class TranslateSpeechWithAzureAIService
 
     private static async Task Translate(string targetLanguage, SpeechConfig speechConfig, SpeechTranslationConfig translationConfig)
     {
-        string translation = "";
 
         // ******************** Translate speech from microphone ********************
         //using AudioConfig audioConfig = AudioConfig.FromDefaultMicrophoneInput();
@@ -105,7 +104,7 @@ internal sealed class TranslateSpeechWithAzureAIService
         TranslationRecognitionResult result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
         WriteLine($"Translating '{result.Text}'");
 
-        translation = result.Translations[targetLanguage];
+        string translation = result.Translations[targetLanguage];
         OutputEncoding = Encoding.UTF8;
         WriteLine(translation);
         // ******************** Translate speech from file ********************
