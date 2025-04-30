@@ -30,11 +30,11 @@ internal sealed class TranslateSpeechWithAzureAIService
         try
         {
             // Get config settings from AppSettings
-            string aiSvcKey = appConfig?.NLPAzAIServices?.SpeechAIService?.Key!;
-            string aiSvcRegion = appConfig?.NLPAzAIServices?.SpeechAIService?.Region!;
+            string azureServiceKey = appConfig?.NLPAzAIServices?.SpeechAIService?.Key!;
+            string azureServiceRegion = appConfig?.NLPAzAIServices?.SpeechAIService?.Region!;
 
             // Configure translation
-            translationConfig = SpeechTranslationConfig.FromSubscription(aiSvcKey, aiSvcRegion);
+            translationConfig = SpeechTranslationConfig.FromSubscription(azureServiceKey, azureServiceRegion);
             translationConfig.SpeechRecognitionLanguage = "en-US";
             translationConfig.AddTargetLanguage("fr");
             translationConfig.AddTargetLanguage("es");
@@ -42,7 +42,7 @@ internal sealed class TranslateSpeechWithAzureAIService
             WriteLine("Ready to translate from " + translationConfig.SpeechRecognitionLanguage);
 
             // Configure speech
-            speechConfig = SpeechConfig.FromSubscription(aiSvcKey, aiSvcRegion);
+            speechConfig = SpeechConfig.FromSubscription(azureServiceKey, azureServiceRegion);
 
             string targetLanguage = "";
             while (targetLanguage != "quit")
@@ -82,14 +82,14 @@ internal sealed class TranslateSpeechWithAzureAIService
         // ******************** Translate speech from microphone ********************
 
         // ******************** Translate speech from file ********************
-        string audioFile = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
-        //SoundPlayer wavPlayer = new(audioFile);
+        string audioFilePath = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
+        //SoundPlayer wavPlayer = new(audioFilePath);
         //wavPlayer.Play();
 
         // Platform-specific audio playback
         if (OperatingSystem.IsWindows())
         {
-            using SoundPlayer wavPlayer = new(audioFile);
+            using SoundPlayer wavPlayer = new(audioFilePath);
             wavPlayer.Play();
         }
         else
@@ -97,7 +97,7 @@ internal sealed class TranslateSpeechWithAzureAIService
             WriteLine("Audio playback not supported on this platform. Continuing with translation...");
         }
 
-        using AudioConfig audioConfig = AudioConfig.FromWavFileInput(audioFile);
+        using AudioConfig audioConfig = AudioConfig.FromWavFileInput(audioFilePath);
         using TranslationRecognizer translator = new(translationConfig, audioConfig);
 
         WriteLine("Getting speech from file...");
@@ -110,13 +110,13 @@ internal sealed class TranslateSpeechWithAzureAIService
         // ******************** Translate speech from file ********************
 
         // Synthesize translation
-        var voices = new Dictionary<string, string>
+        var languageVoiceMap = new Dictionary<string, string>
         {
             ["fr"] = "fr-FR-HenriNeural",
             ["es"] = "es-ES-ElviraNeural",
             ["hi"] = "hi-IN-MadhurNeural"
         };
-        speechConfig.SpeechSynthesisVoiceName = voices[targetLanguage];
+        speechConfig.SpeechSynthesisVoiceName = languageVoiceMap[targetLanguage];
 
         using SpeechSynthesizer speechSynthesizer = new(speechConfig);
 
