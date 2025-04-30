@@ -68,44 +68,52 @@ internal sealed class TranslateSpeechWithAzureAIService
 
     private static async Task Translate(string targetLanguage, SpeechConfig speechConfig, SpeechTranslationConfig translationConfig)
     {
+        string translation = "";
+        TranslationRecognitionResult result;
 
-        // ******************** Translate speech from microphone ********************
-        //using AudioConfig audioConfig = AudioConfig.FromDefaultMicrophoneInput();
-        //using TranslationRecognizer translator = new(translationConfig, audioConfig);
+        // Ask the user for input method choice
+        WriteLine("\nSelect input source:\n 1 = Microphone\n 2 = Audio file\n");
+        string inputChoice = ReadLine()?.Trim() ?? "2"; // Default to file if no input
 
-        //WriteLine("Speak now...");
-        //TranslationRecognitionResult result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
-        //WriteLine($"Translating '{result.Text}'");
-        //translation = result.Translations[targetLanguage];
-        //OutputEncoding = Encoding.UTF8;
-        //WriteLine(translation);
-        // ******************** Translate speech from microphone ********************
-
-        // ******************** Translate speech from file ********************
-        string audioFilePath = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
-
-        // Platform-specific audio playback
-        if (OperatingSystem.IsWindows())
+        if (inputChoice == "1")
         {
-            using SoundPlayer wavPlayer = new(audioFilePath);
-            wavPlayer.Play();
+            // ******************** Translate speech from microphone ********************
+            using AudioConfig audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+            using TranslationRecognizer translator = new(translationConfig, audioConfig);
+
+            WriteLine("Speak now...");
+            result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
+            // ******************** Translate speech from microphone ********************
         }
         else
         {
-            WriteLine("Audio playback not supported on this platform. Continuing with translation...");
+            // ******************** Translate speech from file ********************
+            string audioFilePath = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
+
+            // Platform-specific audio playback
+            if (OperatingSystem.IsWindows())
+            {
+                WriteLine("Getting speech from file...");
+                using SoundPlayer wavPlayer = new(audioFilePath);
+                wavPlayer.Play();
+            }
+            else
+            {
+                WriteLine("Audio playback not supported on this platform. Continuing with translation...");
+            }
+
+            using AudioConfig audioConfig = AudioConfig.FromWavFileInput(audioFilePath);
+            using TranslationRecognizer translator = new(translationConfig, audioConfig);
+
+            result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
+            // ******************** Translate speech from file ********************
         }
 
-        using AudioConfig audioConfig = AudioConfig.FromWavFileInput(audioFilePath);
-        using TranslationRecognizer translator = new(translationConfig, audioConfig);
-
-        WriteLine("Getting speech from file...");
-        TranslationRecognitionResult result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
+        // Common processing for both input methods
         WriteLine($"Translating '{result.Text}'");
-
-        string translation = result.Translations[targetLanguage];
+        translation = result.Translations[targetLanguage];
         OutputEncoding = Encoding.UTF8;
         WriteLine(translation);
-        // ******************** Translate speech from file ********************
 
         // Synthesize translation
         var languageVoiceMap = new Dictionary<string, string>
