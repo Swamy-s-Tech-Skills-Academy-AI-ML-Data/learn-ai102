@@ -83,8 +83,6 @@ internal sealed class TranslateSpeechWithAzureAIService
 
         // ******************** Translate speech from file ********************
         string audioFilePath = @"D:\STSAAIMLDT\learn-ai102\src\Data\NLP\Speech\station.wav";
-        //SoundPlayer wavPlayer = new(audioFilePath);
-        //wavPlayer.Play();
 
         // Platform-specific audio playback
         if (OperatingSystem.IsWindows())
