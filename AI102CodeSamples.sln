@@ -63,6 +63,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AZAOIChat", "AZAOIChat", "{
 		src\PY\GenAIAzOpenAIServices\AZAOIChat\AzOAIChatCompletion.py = src\PY\GenAIAzOpenAIServices\AZAOIChat\AzOAIChatCompletion.py
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Speech", "Speech", "{23917E6D-E450-4CEB-A8D7-16C3A0A282B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "translator", "translator", "{ADEC370A-676B-493E-9F91-63AF8172E74E}"
+	ProjectSection(SolutionItems) = preProject
+		src\PY\NLPAzAIServices\Speech\translator\translator.py = src\PY\NLPAzAIServices\Speech\translator\translator.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +109,8 @@ Global
 		{8ABBF93C-F6F0-474A-93AA-AC99D1357C7E} = {9F4FC48B-B368-4DBA-B446-7FA5069829C5}
 		{EAE6083E-0DCA-4B60-BA35-F548972CCC80} = {112AC4F7-A77A-4EE9-B341-689253BCA82D}
 		{64704E17-6197-468F-BBAC-E956C293FFE4} = {EAE6083E-0DCA-4B60-BA35-F548972CCC80}
+		{23917E6D-E450-4CEB-A8D7-16C3A0A282B3} = {B435BBBE-CF2B-4339-AE8D-CBB32A7975C3}
+		{ADEC370A-676B-493E-9F91-63AF8172E74E} = {23917E6D-E450-4CEB-A8D7-16C3A0A282B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8B7A83D-681E-47B8-8E99-D8A28C2FEC0D}
