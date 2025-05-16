@@ -43,7 +43,7 @@ internal sealed class TranslateSpeechWithAzureAIService
             translationConfig.AddTargetLanguage("fr");
             translationConfig.AddTargetLanguage("es");
             translationConfig.AddTargetLanguage("hi");
-            
+
             ForegroundColor = ConsoleColor.Blue;
             WriteLine($"Ready to translate from {translationConfig.SpeechRecognitionLanguage}");
             ResetColor();
@@ -61,7 +61,7 @@ internal sealed class TranslateSpeechWithAzureAIService
                 ForegroundColor = ConsoleColor.DarkGray;
                 WriteLine(" Enter anything else to stop\n");
                 ResetColor();
-                
+
                 targetLanguage = ReadLine()?.ToLowerInvariant()!;
                 if (translationConfig.TargetLanguages.Contains(targetLanguage))
                 {
@@ -97,7 +97,7 @@ internal sealed class TranslateSpeechWithAzureAIService
             ForegroundColor = ConsoleColor.White;
             WriteLine(" 1 = Microphone\n 2 = Audio file\n");
             ResetColor();
-            
+
             string inputChoice = ReadLine()?.Trim() ?? "2"; // Default to file if no input
 
             if (inputChoice == "1")
@@ -109,7 +109,7 @@ internal sealed class TranslateSpeechWithAzureAIService
                 ForegroundColor = ConsoleColor.Yellow;
                 WriteLine("🎙️ Speak now...");
                 ResetColor();
-                
+
                 result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
                 // ******************** Translate speech from microphone ********************
             }
@@ -124,7 +124,7 @@ internal sealed class TranslateSpeechWithAzureAIService
                     ForegroundColor = ConsoleColor.Yellow;
                     WriteLine("🔊 Playing audio file...");
                     ResetColor();
-                    
+
                     using SoundPlayer wavPlayer = new(audioFilePath);
                     wavPlayer.Play();
                 }
@@ -141,7 +141,7 @@ internal sealed class TranslateSpeechWithAzureAIService
                 ForegroundColor = ConsoleColor.Cyan;
                 WriteLine("Getting speech from file...");
                 ResetColor();
-                
+
                 result = await translator.RecognizeOnceAsync().ConfigureAwait(false);
                 // ******************** Translate speech from file ********************
             }
@@ -149,10 +149,10 @@ internal sealed class TranslateSpeechWithAzureAIService
             // Common processing for both input methods
             ForegroundColor = ConsoleColor.Blue;
             WriteLine($"📝 Original text: '{result.Text}'");
-            
+
             translation = result.Translations[targetLanguage];
             OutputEncoding = Encoding.UTF8;
-            
+
             ForegroundColor = ConsoleColor.Green;
             WriteLine($"🌐 Translation ({targetLanguage}): {translation}");
             ResetColor();
@@ -169,7 +169,7 @@ internal sealed class TranslateSpeechWithAzureAIService
             ForegroundColor = ConsoleColor.Magenta;
             WriteLine($"🔊 Playing synthesized speech in {languageVoiceMap[targetLanguage]}...");
             ResetColor();
-            
+
             using SpeechSynthesizer speechSynthesizer = new(speechConfig);
 
             SpeechSynthesisResult speak = await speechSynthesizer.SpeakTextAsync(translation).ConfigureAwait(false);
